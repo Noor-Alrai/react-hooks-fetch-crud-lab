@@ -1,7 +1,7 @@
 import React from "react";
 
-function QuestionItem({ question , onDeleteQuestion, onUpdateeQuestion }) {
-  const { id, prompt, answers, correctIndex } = question;
+function QuestionItem({ id, prompt, answers, correctIndex  , setOnDelete, setOnUpdate }) {
+
 
   const options = answers.map((answer, index) => (
     <option key={index} value={index}>
@@ -9,32 +9,7 @@ function QuestionItem({ question , onDeleteQuestion, onUpdateeQuestion }) {
     </option>
   ));
 
-  function handelDeleteQuestion(){
-    fetch(`http://localhost:4000/questions/${question.id}`,{
-      method: "DELETE"
-    })
-    .then(r => r.json())
-    .then(deleteQuestion => onDeleteQuestion(deleteQuestion))
-    
-  }
-    function handleUpdateQuestion() {
-      fetch(`http://localhost:4000/questions/${question.id}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          "correctIndex": question.correctIndex,
-        }),
-      }) .then((response) => {
-        if (response.ok) {
-          return response.json();
-        } else {
-          throw new Error("Failed to update question");
-        }
-      })
-      .then((updatedQuestion) => onUpdateeQuestion(updatedQuestion))
-    }
+  
 
   return (
     <li>
@@ -44,8 +19,8 @@ function QuestionItem({ question , onDeleteQuestion, onUpdateeQuestion }) {
         Correct Answer:
         <select defaultValue={correctIndex} >{options}</select>
       </label>
-      <button onClick={handelDeleteQuestion}>Delete Question</button>
-      <button onClick={handleUpdateQuestion}>Update Question</button>
+      <button onClick={() => setOnDelete(id)}>Delete Question</button>
+      <button onClick={() => setOnUpdate(id)}>Update Question</button>
       
     </li>
   );
